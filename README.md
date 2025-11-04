@@ -1,92 +1,151 @@
-A mobile app (React Native, Android-first) to help older adults and caregivers manage appointments, medications, and safety needs—built as a practical engineering capstone. This repo is a sanitized showcase: code and assets that demonstrate the UI, core flows, and native modules, without real provider integrations or private keys.
+EverCare — Public Showcase 
 
-This is a student project at a pre-launch stage; several screens and support features are placeholders by design.
+A mobile app (React Native, Android-first) that helps older adults and caregivers manage medications, doctor appointments, and safety.
 
-✨ What’s inside (showcase scope)
+Status: Pre-API / Pre-security. This is a sanitized version of our MAHAT submission.
+Real integrations and credentials live in a private working repo.
+A runnable offline branch (demo-mock) will be added next.
 
-Core screens & UX: Home, Appointment Center, History, Medication, Settings, Login/Signup, Support (placeholder).
+✨ Highlights
 
-Architecture: UI screens, services layer, global state (context), navigation, types/utilities, Android native modules.
+Medication management UI — list, dose, schedule (demo UI).
 
-Mock data for Israeli providers (Maccabi, Clalit, Meuhedet, Leumit) to demo appointment flows offline.
+Appointments — upcoming visits + “next appointment” widget (demo UI).
 
-Native Android code (Java) for background services, notifications, settings bridging, and fall-detection scaffolding.
+Safety — fall-detection scaffolding + one-tap Emergency flow (MADA/caregiver).
 
-Full source appendix in the project book lists folders like screens/, services/, context/, navigation/, types/, utils/, styles/, mocks/, and Android Java modules.
+DDI concept — flags potential drug–drug interactions (informational only).
 
-🧭 Feature overview (current)
+Clean architecture — TypeScript, modular screens/components/services, Android native scaffolding for background work.
 
-Appointment browsing and mock scheduling across major Israeli providers (demo data).
+🧭 Two-Repo Model
 
-Medication tracker (demo).
+Private Working Repo — active development, real APIs (FHIR/SMART-on-FHIR), Firebase/Auth, security hardening.
 
-Basic auth flows (email/password UI wired to a dummy auth layer in this showcase).
+This Public Showcase — safe code & UI for review (no secrets, no PHI, no live API calls).
 
-Theming + accessibility considerations (typography, color system).
+🩺 Feature Details
+DDI (Drug–Drug Interaction)
 
-Support page and FAQ placeholders to set expectations.
+Goal: raise awareness of potential interactions when users add/edit meds.
 
-🏗️ Architecture at a glance
+Behavior (showcase): compares med pairs against a small mock index and shows severity labels (e.g., informational / monitor / avoid) + a short rationale and disclaimer.
+
+Privacy: can run locally for common pairs; richer cloud checks exist in the private repo.
+
+Fall Detection
+
+Heuristics: impact spike → short immobility (optionally posture check).
+
+UX: alert shows a Cancel timer (e.g., 20–30s). If not cancelled, it escalates to Emergency.
+
+Tech: Android native scaffolding for sensors/receivers. In demo-mock, sensors can be simulated for repeatable demos.
+
+Emergency Calls (MADA / Caregiver)
+
+One-tap Emergency: choose MADA (101) or a configured caregiver contact.
+
+Auto-escalation: if a fall isn’t cancelled in time, auto-call MADA; optionally send SMS to caregiver (permissions required).
+
+Showcase note: Calls/SMS are simulated here; the private repo contains real flows and permission handling.
+
+🏗️ Architecture
+
+React Native + TypeScript: screens, components, navigation (stack/drawer/tab), context state, theming.
+
+Services: fall detection, notifications, permissions helpers.
+
+Android Native (Java): background listener + receivers; bridges to RN.
+
+Mocks: provider slots/doctors + DDI samples for offline demos.
+
+📁 Project Structure (typical)
 root/
-  App.tsx
-  screens/                # Feature screens & UI components
-  services/               # Appointment, notifications, fall detection, permissions
-  context/                # Global SettingsContext & providers
-  navigation/             # Navigators & routes
-  types/                  # TypeScript interfaces
-  utils/                  # Helpers & theming hooks
-  styles/                 # Colors & global styles
-  mocks/                  # Mock provider doctors/slots JSON
-  android/app/src/...     # Native Android modules & services
+  android/                      # Native Android project
+  ios/                          # Native iOS project (placeholder at this stage)
+  src/
+    components/                 # Reusable UI
+    screens/                    # Home, Medications, Appointments, Safety, Settings
+    navigation/                 # Navigators & route maps
+    context/                    # SettingsContext, mock/global state
+    services/                   # fallDetection, notifications, permissions
+    mocks/                      # mock providers, slots, sample DDI pairs
+    styles/                     # colors / global styles
+    types/                      # TypeScript interfaces
+    utils/                      # helpers & theming hooks
+  assets/
+  app.json
+  package.json
+  tsconfig.json
+  babel.config.js
+  metro.config.js
 
 
-Supported by the project book’s structure section.
+In this snapshot, sensitive files (e.g., config/firebase.ts, .env, mobile configs) are intentionally not included.
 
-🧪 Mock data
+🔍 How to Review (now)
 
-This showcase includes JSON fixtures for providers and slots to keep the app fully demoable offline:
-mocks/clalitDoctors.json, mocks/maccabiSlots.json, mocks/meuhedetSlots.json, mocks/leumitSlots.json, etc.
+Browse src/screens/, src/services/, src/mocks/, src/navigation/, src/context/ to see UI composition and logic scaffolding.
 
-🔐 Security & data
+Check the fall-detection → emergency flow wiring and DDI handling patterns.
 
-No real API calls; no provider credentials; no Firebase keys in this repo.
+This branch is code-review focused and may not build without private config.
 
-Secrets belong in a private repository and .env files excluded via .gitignore.
+▶️ How to Run (soon)
 
-If you’re evaluating: everything here is intentionally safe to view.
+A fully offline demo branch demo-mock will be published:
 
-For collaborators, a private “secrets-local/” package (shared out-of-band) provides keys/configs in the working repo (not this showcase).
-📱 Key native pieces (Android)
+git clone https://github.com/<your-username>/EverCare_ShowCase
+cd EverCare_ShowCase
+git checkout demo-mock
+npm install
+npm run android   # or: npm run ios
 
-MainActivity starts background services; New Architecture flags are wired.
 
-SettingsModule and packages bridge settings/notifications to RN and send broadcasts.
+That branch will use mock appointments, mock DDI, and a simulated fall → emergency flow (no keys required).
 
-Fall-detection scaffolding & receivers are registered properly for Android 13+.
+🔒 Security & Privacy
 
-🧩 Tech stack
+Excluded by design (never stored in this repo):
 
-React Native (TypeScript) UI & navigation
+.env, .env.*
 
-Android native modules (Java)
+android/app/google-services.json
 
-Mock data + local state for demo
+ios/GoogleService-Info.plist
 
-Design: Colors/Global styles and Raleway typography referenced in code
+serviceAccount*.json, *.jks, *.keystore
 
-Related learning resources used during development include React Native & Firebase docs and course materials.
+We follow “public code / private credentials.”
+Disclaimer: EverCare is not a medical device. DDI prompts are informational; users should consult a clinician.
 
-🗺️ Roadmap (post-showcase)
+🗺️ Roadmap
 
-Replace mocks with real provider APIs (FHIR/SMART-on-FHIR) in the private repo.
+Public Showcase
 
-Secure auth & data (Firebase/Auth), with no secrets in git.
+v1.0-exam — sanitized MAHAT snapshot (this)
 
-CI for lint/tests/build on private repo.
+demo-mock — runnable offline demo (mock data + simulated safety)
 
-Accessibility & performance polish.
+Screenshots + short demo clip in README
 
-🤝 Team & credit
+Private Working Repo
 
-Built by a Marcel Maroon and Yevgeny Nikolayev as part of a practical engineering program. This repo is a public, safe showcase; the active, private repo contains real integrations and credentials.
+Firebase/Auth with App Check, provider APIs (FHIR/SMART-on-FHIR)
 
+Cloud DDI service with richer data sources
+
+CI, accessibility, and performance polish
+
+🧰 Tech Stack
+
+React Native (TypeScript), Android native modules (Java), mock data/state for demos, global styles/typography.
+
+📜 License
+
+MIT (see LICENSE).
+
+🤝 Contact
+
+Maintainers: Yevgeny Nikolayev & Marcel Maron
+For collaboration or to review the private roadmap, please open an issue.
