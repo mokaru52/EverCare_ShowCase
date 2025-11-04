@@ -1,0 +1,57 @@
+# --- Secrets: never commit ---
+secrets-local/
+.env
+.env.*
+serviceAccount*.json
+google-services.json
+GoogleService-Info.plist
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
+
+# --- Node / package managers ---
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-lock.yaml
+
+# --- Build artifacts ---
+dist/
+build/
+
+# --- Android ---
+android/.gradle/
+android/build/
+android/app/build/
+*.iml
+*.apk
+*.aab
+captures/
+
+# --- iOS ---
+ios/Pods/
+ios/build/
+ios/DerivedData/
+*.xcuserstate
+*.xcworkspace
+*.xcuserdata/
+*.lock
+
+# --- Expo / RN ---
+.expo/
+.expo-shared/
+*.pack
+*.map
+.expo-dev-cache/
+
+# --- Tools / CI / Fastlane (optional to ignore) ---
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+
+# --- OS/editor noise ---
+.DS_Store
+Thumbs.db
+*.swp
+*.orig
